@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import com.reservationForm.common.MonthData;
 import com.reservationForm.entity.ReservationEntity;
 import com.reservationForm.form.ReservationData;
 import com.reservationForm.repository.ReservationRepository;
+import com.reservationForm.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReservationController {
 	private final ReservationRepository reservationRepository;
+	private final ReservationService reservationService;
 	private final HttpSession session;
 
 	@GetMapping("/")
@@ -44,9 +47,11 @@ public class ReservationController {
 				}
 			}
 		}
+		Map<String, Map<LocalDate, String>> weatherMap = reservationService.getWertherList();
 		//仮で予定日リスト
 		//現在月取得
 		//session.setAttribute("scheduleList", scheduleList);
+		mv.addObject("weatherMap", weatherMap);
 		mv.addObject("now", new MonthData());
 		mv.addObject("scheduleList", scheduleList);
 		mv.setViewName("reservationForm");
