@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -21,6 +22,18 @@ public class TimeDefines {
 			List<LocalDate> localDateList = new ArrayList<LocalDate>();
 			localDateList = this.timeDefine.stream().map(time -> OffsetDateTime.parse(time.getDateTime()).toLocalDate())
 					.toList();
+			return localDateList;
+		} else {
+			return null;
+		}
+	}
+
+	public List<Integer> local() {
+		if (this.timeDefine != null || this.timeDefine.size() != 0) {
+			List<Integer> localDateList = new ArrayList<Integer>();
+			localDateList = this.timeDefine.stream()
+					.map(time -> OffsetDateTime.parse(time.getDateTime()).toLocalDate().getDayOfMonth())
+					.collect(Collectors.toList());
 			return localDateList;
 		} else {
 			return null;

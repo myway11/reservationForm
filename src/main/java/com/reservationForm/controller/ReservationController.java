@@ -47,7 +47,7 @@ public class ReservationController {
 				}
 			}
 		}
-		Map<String, Map<LocalDate, String>> weatherMap = reservationService.getWertherList();
+		Map<Integer, Map<Integer, String>> weatherMap = reservationService.getWertherList();
 		//仮で予定日リスト
 		//現在月取得
 		//session.setAttribute("scheduleList", scheduleList);
@@ -55,6 +55,7 @@ public class ReservationController {
 		mv.addObject("now", new MonthData());
 		mv.addObject("scheduleList", scheduleList);
 		mv.setViewName("reservationForm");
+		//System.out.println(weatherMap);
 		return mv;
 	}
 

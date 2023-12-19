@@ -22,7 +22,7 @@
 		}
 
 		/* カレンダーのスタイルを調整 */
-		table {
+		.table {
 			border-collapse: collapse;
 			width: 100%;
 			margin-bottom: 30px;
@@ -33,12 +33,21 @@
 			border: 1px solid #ddd;
 			padding: 8px;
 			text-align: center;
+			
+		}
+		tbody td {
+			border: 1px solid #ddd;
+			padding: 8px;
+			text-align: center;
+			width: calc(100%/7);
+			height: 110px;
 		}
 
 		.custom-table {
 			border: solid 5px #ddd;
 		}
-		.link:hover{
+
+		.link:hover {
 			background-color: #f0f8ff;
 		}
 	</style>
@@ -72,16 +81,33 @@
 				</tr>
 			</thead>
 			<tbody>
+				<!--月の日数の配列を取得-->
 				<tr th:each="week:${now.dayList}">
+					<!--配列のforeach-->
 					<span th:each="day:${week}">
+						<!--繰り返し要素の値が０なら列を空欄-->
 						<td th:if="${day == 0}"></td>
+						<!--繰り返し要素の値が０じゃなければ-->
 						<span th:unless="${day == 0}">
+							<!--予定リストに繰り返し要素の値が存在した場合グレー-->
 							<td th:if="${#lists.contains(scheduleList, day)}" th:text="${day}" class="bg-secondary">
 							</td>
-							<td class="link" th:unless="${#lists.contains(scheduleList, day)}" style="position: relative;">
-								<a class="link"
-									style="display: inline-block; width: 100%; height: 100%; text-decoration:none; color: black;"
-									th:href="@{/form/__${day}__}" th:text="${day}"></a>
+							<!--予定リストに繰り返し要素の値が存在しない場合リンクで予約可能-->
+							<td class="link" th:unless="${#lists.contains(scheduleList, day)}"
+								style="position: relative;">
+								<span th:if="${weatherMap.get(1).containsKey(day)}">
+									<a class="link"
+										style="display: inline-block; width: 100%; height: 100%; text-decoration:none; color: black;"
+										th:href="@{/form/__${day}__}">
+										<p th:text="${day}" style="height: 25%;"></p>
+										<img th:src="@{__${weatherMap.get(1).get(day)}__}" style="height: 50px; width: 50px;"></img>
+									</a>
+								</span>
+								<span th:unless="${weatherMap.get(1).containsKey(day)}">
+									<a class="link"
+										style="display: inline-block; width: 100%; height: 100%; text-decoration:none; color: black;"
+										th:href="@{/form/__${day}__}" th:text="${day}"></a>
+								</span>
 							</td>
 						</span>
 					</span>

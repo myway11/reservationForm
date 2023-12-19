@@ -37,6 +37,10 @@
   .calendar th {
     padding: 3px 6px;
   }
+  img{
+	  width: 100px;
+	  height: 100px;
+  }
 }
 
 .calendar .sun {
