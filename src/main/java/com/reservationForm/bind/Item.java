@@ -15,9 +15,10 @@ public class Item {
 	@XmlElement(name = "Area", namespace = "http://xml.kishou.go.jp/jmaxml1/body/meteorology1/")
 	private Area area;
 
-	public List<String> getWeathers() {
-		List<String> weatherList = this.getKind().get(0).getProperty().getWeatherPart().getWeatherList().stream()
-				.map(weather -> weather.getWeather()).toList();
-		return weatherList;
+	public List<Integer> getWeatheCodes() {
+		List<Integer> weatherCodeList = this.getKind().get(0).getProperty().getWeatherCodePart().getWeatherCodeList()
+				.stream()
+				.map(weatherCode -> weatherCode.getWetherCode()).toList();
+		return weatherCodeList;
 	}
 }
