@@ -1,6 +1,7 @@
 package com.reservationForm.form;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.reservationForm.entity.ReservationEntity;
@@ -32,18 +33,15 @@ public class ReservationData {
 
 	private String request;
 
-	private int month;
-
-	private int day;
+	private LocalDate date;
 
 	@Min(value = 0)
 	private int time;
 
 	public ReservationEntity toEntity() {
 		ReservationEntity reservationEntity = new ReservationEntity();
-		LocalDateTime date = LocalDateTime.of(2023, this.getMonth(), this.getDay(),
-				this.getTime(), 0);
-		Timestamp timestamp = Timestamp.valueOf(date);
+		LocalDateTime dateTime = date.atTime(time, 0);
+		Timestamp timestamp = Timestamp.valueOf(dateTime);
 
 		reservationEntity.setDate(timestamp);
 		reservationEntity.setName(this.name);

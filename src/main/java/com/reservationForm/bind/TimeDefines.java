@@ -28,11 +28,11 @@ public class TimeDefines {
 		}
 	}
 
-	public List<Integer> local() {
+	public List<LocalDate> local() {
 		if (this.timeDefine != null || this.timeDefine.size() != 0) {
-			List<Integer> localDateList = new ArrayList<Integer>();
+			List<LocalDate> localDateList = new ArrayList<LocalDate>();
 			localDateList = this.timeDefine.stream()
-					.map(time -> OffsetDateTime.parse(time.getDateTime()).toLocalDate().getDayOfMonth())
+					.map(time -> OffsetDateTime.parse(time.getDateTime()).toLocalDate())
 					.collect(Collectors.toList());
 			return localDateList;
 		} else {

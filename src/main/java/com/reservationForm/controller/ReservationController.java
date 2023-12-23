@@ -1,8 +1,10 @@
 package com.reservationForm.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,8 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.reservationForm.common.MonthData;
+import com.reservationForm.common.MonthLocalDate;
 import com.reservationForm.entity.ReservationEntity;
+import com.reservationForm.form.AreaSelect;
 import com.reservationForm.form.ReservationData;
 import com.reservationForm.repository.ReservationRepository;
 import com.reservationForm.service.ReservationService;
@@ -36,46 +39,55 @@ public class ReservationController {
 
 	@GetMapping("/")
 	public ModelAndView showForm(ModelAndView mv) {
-		List<Integer> scheduleList = new ArrayList<>();
+		if (session.getAttribute("areaSelect") == null) {
+			session.setAttribute("areaSelect", new AreaSelect(1));
+		}
+		List<LocalDate> scheduleList = new ArrayList<>();
 		List<ReservationEntity> reservationLists = reservationRepository.findAll();
 		for (int i = 0; i <= reservationLists.size(); i++) {
 			for (int j = i + 1; j < reservationLists.size(); j++) {
 				LocalDate date1 = reservationLists.get(i).getDate().toLocalDateTime().toLocalDate();
 				LocalDate date2 = reservationLists.get(j).getDate().toLocalDateTime().toLocalDate();
 				if (date1.equals(date2)) {
-					scheduleList.add(date1.getDayOfMonth());
+					scheduleList.add(date1);
 				}
 			}
 		}
-		Map<Integer, Map<Integer, String>> weatherMap = reservationService.getWertherList();
+		MonthLocalDate localDate = new MonthLocalDate().nowDate(0);
+		MonthLocalDate nextMonth = new MonthLocalDate().nowDate(1);
+		List<MonthLocalDate> localDates = new ArrayList<MonthLocalDate>(Arrays.asList(localDate, nextMonth));
+		System.out.println(localDate.getWeekDateList());
+		Map<Integer, Map<LocalDate, String>> weatherMap = reservationService.getWertherList();
 		//仮で予定日リスト
 		//現在月取得
 		//session.setAttribute("scheduleList", scheduleList);
+		mv.addObject("areaSelect", (AreaSelect) session.getAttribute("areaSelect"));
 		mv.addObject("weatherMap", weatherMap);
-		mv.addObject("now", new MonthData());
+		mv.addObject("localDates", localDates);
 		mv.addObject("scheduleList", scheduleList);
-		mv.setViewName("reservationForm");
-		//System.out.println(weatherMap);
+		mv.setViewName("test");
+		System.out.println((AreaSelect) session.getAttribute("areaSelect"));
 		return mv;
 	}
 
 	@GetMapping("/form/{day}")
-	public String form(@PathVariable(name = "day") int day, Model model) {
+	public String form(@PathVariable(name = "day") String day, Model model) {
+		LocalDate date = LocalDate.parse(day, DateTimeFormatter.ISO_DATE);
+
 		List<ReservationEntity> reservationEntityList = reservationRepository.findAll();
-		List<Integer> timeList = reservationEntityList.stream()
-				.filter(x -> x.getDate().toLocalDateTime().getDayOfMonth() == day)
-				.map(x -> x.getDate().toLocalDateTime().getHour())
+		List<LocalDateTime> timeList = reservationEntityList.stream()
+				.filter(x -> x.getDate().toLocalDateTime().toLocalDate().equals(date))
+				.map(x -> x.getDate().toLocalDateTime())
 				.collect(Collectors.toList());
 		ReservationData reservationData = new ReservationData();
-		reservationData.setMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
-		reservationData.setDay(day);
+		reservationData.setDate(date);
 		session.setAttribute("daytimeList", timeList);
 		model.addAttribute("reservationData", reservationData);
 		model.addAttribute("daytimeList", timeList);
 		return "form";
 	}
 
-	@PostMapping("/form")
+	@PostMapping("/form/{}")
 	public String reservation(@ModelAttribute @Validated ReservationData reservationData, BindingResult result,
 			Model model, RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
@@ -101,4 +113,12 @@ public class ReservationController {
 		mv.setViewName("redirect:/");
 		return mv;
 	}
+
+	@PostMapping("/area")
+	public String postMethodName(@ModelAttribute AreaSelect areaSelect) {
+		//TODO: process POST request
+		session.setAttribute("areaSelect", areaSelect);
+		return "redirect:/";
+	}
+
 }

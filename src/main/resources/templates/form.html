@@ -48,9 +48,8 @@
 	<div class="container">
 		<h1 class="text-center mb-4 text-primary" th:text="#{text.main}"></h1>
 		<!--フォーム入力-->
-		<form th:action="@{/form}" method="post" th:object="${reservationData}">
-			<input type="hidden" th:value="*{day}" name="day">
-			<input type="hidden" th:value="*{month}" name="month">
+		<form th:action="@{/form/2023-12-04}" method="post" th:object="${reservationData}">
+			<input type="hidden" th:value="*{date}" name="date">
 			<div class="mb-3">
 				<!--名前-->
 				<label for="name" class="form-label" th:text="#{label.name}"></label>
@@ -68,13 +67,13 @@
 			</div>
 			<div class="mb-3">
 				<label for="date" class="form-label" th:text="#{label.date}"></label><br>
-				<span class="fw-bold" th:text="*{month}+'月'+*{day}+'日'"></span>
+				<span class="fw-bold" th:text="*{#temporals.format(date,'MM月dd日')}"></span>
 				<!--希望時間-->
 				<select class="form-select" name="time">
 					<option th:text="#{option.time1}" th:field="*{time}" value="-1"></option>
 					<div th:each="i:${#numbers.sequence(8,22,2)}">
 <!--リストはmodelAttributeで渡している為、エラーで消える-->
-						<option th:unless="${#lists.contains(daytimeList,i)}"  th:field="*{time}" th:text="${i+' : 00 ～ '+(i+2)+' : 00'}" th:value="${i}"></option>
+						<option th:unless="${#lists.contains(#temporals.hour(daytimeList),i)}"  th:field="*{time}" th:text="${i+' : 00 ～ '+(i+2)+' : 00'}" th:value="${i}"></option>
 					</div>
 				</select>
 				<div th:if="${#fields.hasErrors('time')}" th:errors="*{time}" th:errorclass="text-danger">
@@ -108,6 +107,7 @@
 			</div>
 			<div class="mb-3">
 				<button type="submit" class="btn btn-primary" th:text="#{button.submit}"></button>
+				<button type="submit" formmethod="get" class="btn btn-secondary" th:text="#{button.back}" th:formaction="@{/home}"></button>
 			</div>
 		</form>
 	</div>

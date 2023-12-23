@@ -65,7 +65,7 @@
 	<div class="card" th:object="${reservationData}">
 		<h1 class="mb-4" th:text="予約完了"></h1>
 		<h2 th:text="*{name+' 様'}"></h2>
-		<h3 th:text="*{month+'月'+day+'日'+time+'  : 00～'}"></h3>
+		<h3 th:text="*{#temporals.format(date,'MM月dd日')+time+': 00～'}"></h3>
 		<div class="divider"></div>
 		<p>予約内容などの追加情報がここに表示されます。必要に応じてカスタマイズしてください。</p>
 		<a th:href="@{/home}" class="btn btn-primary mt-3">ホームに戻る</a>
