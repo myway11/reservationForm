@@ -19,6 +19,7 @@ import org.w3c.dom.NodeList;
 
 import com.reservationForm.bind.Report;
 import com.reservationForm.bind.TimeSeriesInfo;
+import com.reservationForm.entity.ReservationEntity;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -107,5 +108,19 @@ public class ReservationService {
 			e.printStackTrace();
 		}
 		return url;
+	}
+
+	public List<LocalDate> createScheduleList(List<ReservationEntity> entityList) {
+		List<LocalDate> scheduleList = new ArrayList<LocalDate>();
+		for (int i = 0; i <= entityList.size(); i++) {
+			for (int j = i + 1; j < entityList.size(); j++) {
+				LocalDate date1 = entityList.get(i).getDate().toLocalDateTime().toLocalDate();
+				LocalDate date2 = entityList.get(j).getDate().toLocalDateTime().toLocalDate();
+				if (date1.equals(date2)) {
+					scheduleList.add(date1);
+				}
+			}
+		}
+		return scheduleList;
 	}
 }

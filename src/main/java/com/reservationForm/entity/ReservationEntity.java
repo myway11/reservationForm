@@ -2,6 +2,8 @@ package com.reservationForm.entity;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.Where;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "reservations")
+@Where(clause = "before='N'")
 @Data
 public class ReservationEntity {
 	@Id
@@ -33,4 +36,7 @@ public class ReservationEntity {
 
 	@Column(name = "date")
 	private Timestamp date;
+
+	@Column(name = "before")
+	private String before;
 }

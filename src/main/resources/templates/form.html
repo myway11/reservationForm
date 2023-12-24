@@ -72,8 +72,15 @@
 				<select class="form-select" name="time">
 					<option th:text="#{option.time1}" th:field="*{time}" value="-1"></option>
 					<div th:each="i:${#numbers.sequence(8,22,2)}">
-<!--リストはmodelAttributeで渡している為、エラーで消える-->
-						<option th:unless="${#lists.contains(#temporals.hour(daytimeList),i)}"  th:field="*{time}" th:text="${i+' : 00 ～ '+(i+2)+' : 00'}" th:value="${i}"></option>
+						<span th:if="${#lists.size(daytimeList) == 0}">
+							<!--リストはmodelAttributeで渡している為、エラーで消える-->
+							<option th:field="*{time}" th:text="${i+' : 00 ～ '+(i+2)+' : 00'}" th:value="${i}">
+								</option>
+						</span>
+						<span th:unless="${#lists.size(daytimeList) == 0}">
+							<option th:unless="${#lists.contains(#temporals.hour(daytimeList),i)}" th:field="*{time}"
+								th:text="${i+' : 00 ～ '+(i+2)+' : 00'}" th:value="${i}"></option>
+						</span>
 					</div>
 				</select>
 				<div th:if="${#fields.hasErrors('time')}" th:errors="*{time}" th:errorclass="text-danger">
@@ -107,7 +114,8 @@
 			</div>
 			<div class="mb-3">
 				<button type="submit" class="btn btn-primary" th:text="#{button.submit}"></button>
-				<button type="submit" formmethod="get" class="btn btn-secondary" th:text="#{button.back}" th:formaction="@{/home}"></button>
+				<button type="submit" formmethod="get" class="btn btn-secondary" th:text="#{button.back}"
+					th:formaction="@{/home}"></button>
 			</div>
 		</form>
 	</div>

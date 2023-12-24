@@ -1,11 +1,14 @@
 @charset "UTF-8";
 		/* 追加のスタイルが必要な場合はここに記述 */
+		*{
+			box-sizing: border-box;
+		}
 		body {
 			font-family: Arial, sans-serif;
 			padding: 20px;
 		}
 		.container{
-			max-width: 1200px;
+			max-width: 100%;
 		}
 
 		h1 {
@@ -16,7 +19,7 @@
 		/* カレンダーのスタイルを調整 */
 		table {
 			border-collapse: collapse;
-			margin-bottom: 30px;
+			margin: 10px;
 			width: 100%;
 			border: solid 5px #ddd;
 		}
@@ -26,15 +29,15 @@
 			border: 1px solid #ddd;
 			padding: 8px;
 			text-align: center;
-
+			width: calc(100%/7);
 		}
 
 		tbody td {
 			border: 1px solid #ddd;
 			padding: 8px;
 			text-align: center;
-			height: 110px;
-			width: calc(100%/7);
+			height: 80px;
+			width: 180px;
 		}
 
 		.link:hover {
@@ -45,9 +48,15 @@
 			justify-content: space-between;
 		}
 		
-@media (max-width: 1200px) {
+@media (max-width: 800px) {
 	.calendar-wrap{
 		flex-flow: column;
+	}
+	.container{
+		margin:0;
+	}
+	table{
+		margin: 0px;
 	}
 }
 
