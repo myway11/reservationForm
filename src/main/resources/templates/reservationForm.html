@@ -17,19 +17,19 @@
 </head>
 
 <body>
-	<div class="container text-center">
+	<div class="container">
 		<h1>予約</h1>
-		<form class="mb-4" name="areaSelect" method="post" th:action="@{/area}">
+		<form name="areaSelect" method="post" th:action="@{/area}">
 			<div class="input-group mb-3">
 				<select class="form-select" name="areaSelect">
-					<option  value="1" th:field="${areaSelect.areaSelect}" th:text="#{option.local1}"></option>
-					<option  value="2" th:field="${areaSelect.areaSelect}" th:text="#{option.local2}"></option>
+					<option value="1" th:field="${areaSelect.areaSelect}" th:text="#{option.local1}"></option>
+					<option value="2" th:field="${areaSelect.areaSelect}" th:text="#{option.local2}"></option>
 				</select>
 				<button type="submit" class="btn btn-primary">表示</button>
 			</div>
 		</form>
 		<div class="calendar-wrap">
-			<table class="table custom-table" th:each="now:${localDates}">
+			<table class="table table-bordered" th:each="now:${localDates}">
 				<thead>
 					<tr class="table-primary">
 						<th colspan="7" th:text="${now.month}+'月'"></th>
@@ -44,9 +44,9 @@
 						<th class="table-info">Sat</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody >
 					<!--月の日数の配列を取得-->
-					<tr th:each="week:${now.weekDateList}">
+					<tr th:each="week:${now.weekDateList}" style="height: 110px;">
 						<!--配列のforeach-->
 						<span th:each="day:${week}">
 							<!--繰り返し要素の値が０なら列を空欄-->
@@ -54,15 +54,15 @@
 							<!--繰り返し要素の値が０じゃなければ-->
 							<span th:unless="${day == null}">
 								<!--予定リストに繰り返し要素の値が存在した場合グレー-->
-								<td th:if="${#lists.contains(scheduleList, day) || nowdate >= day}" th:text="${#temporals.day(day)}" class="bg-secondary">
+								<td th:if="${#lists.contains(scheduleList, day) || nowdate >= day}"
+									th:text="${#temporals.day(day)}" class="bg-secondary">
 								</td>
 								<!--予定リストに繰り返し要素の値が存在しない場合リンクで予約可能-->
 								<td class="link" th:unless="${#lists.contains(scheduleList, day) || nowdate >=day}"
 									style="position: relative;">
 									<span th:if="${weatherMap.get(areaSelect.areaSelect).containsKey(day)}">
 										<a class="link"
-											style="display: inline-block; width: 100%; height: 100%; text-decoration:none; color: black;"
-											th:href="${#temporals.format(day,'yyyy-MM-dd')}">
+											th:href="@{/form/__${#temporals.format(day,'yyyy-MM-dd')}__}">
 											<p th:text="${#temporals.day(day)}" style="height: 25%;"></p>
 											<img th:src="@{__${weatherMap.get(areaSelect.areaSelect).get(day)}__}"
 												style="object-fit: cover; width: 75%;"></img>
@@ -70,8 +70,8 @@
 									</span>
 									<span th:unless="${weatherMap.get(areaSelect.areaSelect).containsKey(day)}">
 										<a class="link"
-											style="display: inline-block; width: 100%; height: 100%; text-decoration:none; color: black;"
-											th:href="@{/form/__${#temporals.format(day,'yyyy-MM-dd')}__}" th:text="${#temporals.day(day)}"></a>
+											th:href="@{/form/__${#temporals.format(day,'yyyy-MM-dd')}__}"
+											th:text="${#temporals.day(day)}"></a>
 									</span>
 								</td>
 							</span>
