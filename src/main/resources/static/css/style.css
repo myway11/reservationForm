@@ -10,8 +10,10 @@ body {
 	padding: 20px;
 }
 
-.container {
+.containerf {
 	text-align: center;
+	max-width: 1300px;
+	margin: 0 auto;
 }
 
 h1 {
@@ -52,21 +54,62 @@ tbody {
 	justify-content: space-between;
 }
 
+.linktd {
+	position: relative;
+	height: 100%;
+}
+
 .link {
 	text-decoration: none;
 	color: black;
+	display: inline-block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
 }
 
-@media (max-width: 1200px) {
+.image {
+	object-fit: cover;
+	width: 75%;
+}
+
+tbody tr {
+	height: 100px;
+}
+.link p{
+	padding: 10px;
+	margin: 0px;
+}
+
+@media (max-width: 1000px) {
 	.calendar-wrap {
 		flex-flow: column;
 	}
-
-	.container {
+	.linktd{
+		height: 70px;
+	}
+	.containerf {
 		margin: 0;
 	}
+
 
 	table {
 		margin: 0px;
 	}
+	.image {
+		width: 70%;
+		padding: 5px;
+	}
+
+  tbody	tr {
+		height: 70px;
+	}
+	tbody p{
+	margin :0px;
+}
+.link p{
+	padding-bottom :0px ;
+}
 }

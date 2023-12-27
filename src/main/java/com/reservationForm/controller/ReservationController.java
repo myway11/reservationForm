@@ -63,7 +63,7 @@ public class ReservationController {
 		List<MonthLocalDate> localDates = new ArrayList<MonthLocalDate>(Arrays.asList(localDate, nextMonth));
 
 		Map<Integer, Map<LocalDate, String>> weatherMap = reservationService.getWertherList();
-
+		System.out.println(localDates.size());
 		mv.addObject("areaSelect", (AreaSelect) session.getAttribute("areaSelect"));
 		mv.addObject("weatherMap", weatherMap);
 		mv.addObject("localDates", localDates);
